@@ -1,0 +1,22 @@
+>mysql -u root -p;
+>show databases;
+>CREATE DATABASE FILMSDATABASE;
+>DROP DATABASE FILMSDATABASE; //to delete 
+>create database filmsdatabase;
+
+>use filmsdatabase; //it will the data and we can edit now
+>CREATE TABLE MOVIES (NAME varchar(50),RATING Integer);
+>desc Movies; //Describe DB
+
+>INSERT INTO Movies (Rating,Name) VALUES (4,"Avengers");//value
+>INSERT INTO Movies (Rating,Name) VALUES (3,"Thor the dark world"),(5,"Iron man");//For multipal
+
+>SELECT * FROM Movies; // *-from all
+>SELECT NAME FROM Movies;
+
+>SELCT * FROM Movies
+ WHERE Rating > 4;
+
+>UPDATE Movies Set Rating = 5 
+ WHERE Name = "Avengers Infinity war";
+>drop table movies;
