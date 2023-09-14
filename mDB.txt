@@ -1,0 +1,597 @@
+>show dbs
+>use school
+>db.createCollection("students")
+>db.dropDatabase()
+>db.students.find()  - shows the collection
+>db.students.insertOne({}) - Add the single data into it.
+>db.students.insertMany([{},{},{}]) - To be store in an Array'[]' for multiple data
+>db.students.deleteOne() - for deleting single data
+>db.students.deleteMany()- for deleting the multiple data
+
+
+>db.students.insertOne({name:"Larry",
+                        age:23,
+                        gpa:2.8,
+                        fulltime:false,
+                        registerDate:new Date(),
+                        gradutionDate:null,
+                        courses:["Biology","Chemistry","Calculus"],
+                        address:{street:"123 Fake St.",
+                                 city:"Bikini Bottom",
+                                 zip:12345}})
+ 
+
+ >db.students.find().sort({name:1})  - in strate formate(ABCD)
+ >db.students.find().sort({name:-1})  - in reverse formate(DCBA)
+
+ >db.students.find().limit(2) - print the limited data set 
+
+
+*******************//find()******************** 
+>db.students.find({name:"Spongeboob"}) - targeting the specific data
+
+>db.students.find({},{}) - .find({query},{projection})
+
+school> db.students.find({},{name:true})
+[
+  { _id: ObjectId("6501832c3e98c23e45821ebd"), name: 'Spongebob' },
+  { _id: ObjectId("650184053e98c23e45821ebf"), name: 'Patrick' },
+  { _id: ObjectId("650184053e98c23e45821ec0"), name: 'Sandy' },
+  { _id: ObjectId("650184053e98c23e45821ec1"), name: 'Gary' },
+  { _id: ObjectId("65018b380ac4c82387a7b1bb"), name: 'Larry' }
+]
+
+school> db.students.find({},{_id:false,name:true})
+[
+  { name: 'Spongebob' },
+  { name: 'Patrick' },
+  { name: 'Sandy' },
+  { name: 'Gary' },
+  { name: 'Larry' }
+]
+
+school> db.students.find({},{_id:false,name:true,gpa:true})
+[
+  { name: 'Spongebob', gpa: 3.2 },
+  { name: 'Patrick', gpa: 1.5 },
+  { name: 'Sandy', gpa: 4.5 },
+  { name: 'Gary', gpa: 2.5 },
+  { name: 'Larry', gpa: 2.8 }
+]
+
+
+**********//updateOne(filter,update) *******************
+$set:{} - add fullTime
+$unset:{} - remove fullTime
+
+school> db.students.updateOne({name:"Spongebob"},{$set:{fullTime:true}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+school> db.students.find({name:"Spongebob"})
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2,
+    fullTime: true
+  }
+]
+
+school> db.students.updateOne({_id: ObjectId("6501832c3e98c23e45821ebd")},{$set:{fullTime:false}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+school> db.students.find({name:"Spongebob"})
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2,
+    fullTime: false
+  }
+]
+
+//$unset:{}
+
+school> db.students.updateOne({_id: ObjectId("6501832c3e98c23e45821ebd")},{$unset:{fullTime:""}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+school> db.students.find({_id: ObjectId("6501832c3e98c23e45821ebd")})
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2
+  }
+]
+
+//updateMany({},{})
+
+school> db.students.updateOne({_id: ObjectId("6501832c3e98c23e45821ebd")},{$unset:{fullTime:""}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+school> db.students.find(_id: ObjectId("6501832c3e98c23e45821ebd"))
+
+school> db.students.updateMany({},{$set:{fullTime:false}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 5,
+  modifiedCount: 5,
+  upsertedCount: 0
+}
+school> db.students.find()
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ebf"),
+    name: 'Patrick',
+    age: 38,
+    gpa: 1.5,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec0"),
+    name: 'Sandy',
+    age: 28,
+    gpa: 4.5,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: 18,
+    gpa: 2.5,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("65018b380ac4c82387a7b1bb"),
+    name: 'Larry',
+    age: 23,
+    gpa: 2.8,
+    fulltime: false,
+    registerDate: ISODate("2023-09-13T10:13:12.190Z"),
+    gradutionDate: null,
+    courses: [ 'Biology', 'Chemistry', 'Calculus' ],
+    address: { street: '123 Fake St.', city: 'Bikini Bottom', zip: 12345 },
+    fullTime: false
+  }
+]
+
+//Only Sandy and Gary get updated (fullTime:true)
+
+school> db.students.updateMany({fullTime:{$exists:false}},{$set:{fullTime:true}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 2,
+  modifiedCount: 2,
+  upsertedCount: 0
+}
+school> db.students.find()
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ebf"),
+    name: 'Patrick',
+    age: 38,
+    gpa: 1.5,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec0"),
+    name: 'Sandy',
+    age: 28,
+    gpa: 4.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: 18,
+    gpa: 2.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("65018b380ac4c82387a7b1bb"),
+    name: 'Larry',
+    age: 23,
+    gpa: 2.8,
+    fulltime: false,
+    registerDate: ISODate("2023-09-13T10:13:12.190Z"),
+    gradutionDate: null,
+    courses: [ 'Biology', 'Chemistry', 'Calculus' ],
+    address: { street: '123 Fake St.', city: 'Bikini Bottom', zip: 12345 },
+    fullTime: false
+  }
+]
+
+
+***************//deleteOne({}) & deleteMany({})*****************
+Selecting same as find()
+
+school> db.students.deleteOne({name:"Larry"})
+{ acknowledged: true, deletedCount: 1 }
+school> db.students.find()
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ebf"),
+    name: 'Patrick',
+    age: 38,
+    gpa: 1.5,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec0"),
+    name: 'Sandy',
+    age: 28,
+    gpa: 4.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: 18,
+    gpa: 2.5,
+    fullTime: true
+  }
+]
+school> db.students.deleteMany({fullTime:false})
+{ acknowledged: true, deletedCount: 1 }
+school> db.students.find()
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec0"),
+    name: 'Sandy',
+    age: 28,
+    gpa: 4.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: 18,
+    gpa: 2.5,
+    fullTime: true
+  }
+]
+
+school> db.students.deleteMany({registerDate:{$exists:false}})
+{ acknowledged: true, deletedCount: 3 }
+school> db.students.find()
+school>
+
+
+************//comparition Operator*************
+$ne - not Equal               -db.students.find({name:{$ne:"Spongebob"}})
+$lt - Less than               -db.students.find({age:{$lt:20}})
+$lte - Less than Equal        -db.students.find({age:{$lte:27}})
+$gt - Greater than            -db.students.find({age:{$gt:20}})
+$gte - Greater than Equal     -db.students.find({age:{$gte:27}})
+
+$in - comparition like find() -db.students.find({name:{$in:["Spongebob","Gary","Larry"]}})
+$nin - Not in                 -db.students.find({name:{$nin:["Spongebob","Gary","Larry"]}})
+
+//You can give this a range formate  1-8
+>db.students.find({gpa:{$gte:3,$lte:4}}) 
+
+school> db.students.find({name:{$ne:"Spongebob"}})
+[
+  {
+    _id: ObjectId("650184053e98c23e45821ebf"),
+    name: 'Patrick',
+    age: 38,
+    gpa: 1.5,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec0"),
+    name: 'Sandy',
+    age: 28,
+    gpa: 4.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: 18,
+    gpa: 2.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("65018b380ac4c82387a7b1bb"),
+    name: 'Larry',
+    age: 23,
+    gpa: 2.8,
+    fulltime: false,
+    registerDate: ISODate("2023-09-13T10:13:12.190Z"),
+    gradutionDate: null,
+    courses: [ 'Biology', 'Chemistry', 'Calculus' ],
+    address: { street: '123 Fake St.', city: 'Bikini Bottom', zip: 12345 },
+    fullTime: false
+  }
+]
+
+school> db.students.find({age:{$lt:20}})
+[
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: 18,
+    gpa: 2.5,
+    fullTime: true
+  }
+]
+
+school> db.students.find({age:{$lte:27}})
+[
+  {
+    _id: ObjectId("650184053e98c23e45821ec0"),
+    name: 'Sandy',
+    age: 27,
+    gpa: 4.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: 18,
+    gpa: 2.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("65018b380ac4c82387a7b1bb"),
+    name: 'Larry',
+    age: 23,
+    gpa: 2.8,
+    fulltime: false,
+    registerDate: ISODate("2023-09-13T10:13:12.190Z"),
+    gradutionDate: null,
+    courses: [ 'Biology', 'Chemistry', 'Calculus' ],
+    address: { street: '123 Fake St.', city: 'Bikini Bottom', zip: 12345 },
+    fullTime: false
+  }
+]
+
+//$gt and $gte
+
+school> db.students.find({age:{$gt:30}})
+[
+  {
+    _id: ObjectId("650184053e98c23e45821ebf"),
+    name: 'Patrick',
+    age: 38,
+    gpa: 1.5,
+    fullTime: false
+  }
+]
+
+school> db.students.find({age:{$gte:30}})
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ebf"),
+    name: 'Patrick',
+    age: 38,
+    gpa: 1.5,
+    fullTime: false
+  }
+]
+
+
+//range between
+
+school> db.students.find({gpa:{$gte:3,$lte:4}})
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2,
+    fullTime: true
+  }
+]
+
+//$in and $nin
+
+school> db.students.find({name:{$in:["Spongebob","Gary","Larry"]}})
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: 18,
+    gpa: 2.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("65018b380ac4c82387a7b1bb"),
+    name: 'Larry',
+    age: 23,
+    gpa: 2.8,
+    fulltime: false,
+    registerDate: ISODate("2023-09-13T10:13:12.190Z"),
+    gradutionDate: null,
+    courses: [ 'Biology', 'Chemistry', 'Calculus' ],
+    address: { street: '123 Fake St.', city: 'Bikini Bottom', zip: 12345 },
+    fullTime: false
+  }
+]
+
+school> db.students.find({name:{$nin:["Spongebob","Gary","Larry"]}})
+[
+  {
+    _id: ObjectId("650184053e98c23e45821ebf"),
+    name: 'Patrick',
+    age: 38,
+    gpa: 1.5,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec0"),
+    name: 'Sandy',
+    age: 27,
+    gpa: 4.5,
+    fullTime: true
+  }
+]
+
+
+****************//logical Operator**************
+$and -AND returns all documents that match the conditions of both clauses.
+>db.students.find({$and:[{fullTime:true},{age:{$lte:22}}]})
+
+$not - Inverts the effect of a query expression and returns documents that do not match the query expression. 
+>db.students.find({age:{$not:{$gte:30}}})
+
+$nor - Joins query clauses with a logical NOR returns all documents that fail to match both clauses.(opp. of AND)
+>db.students.find({$nor:[{fullTime:true},{age:{$lte:22}}]})
+
+$or - Joins query clauses with a logical OR returns all documents that match the conditions to either clauses.
+>db.students.find({$and:[{fullTime:true},{age:{$lte:22}}]})
+
+//$and
+school> db.students.find({$and:[{fullTime:true},{age:{$lte:22}}]})
+[
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: 18,
+    gpa: 2.5,
+    fullTime: true
+  }
+]
+
+//$or
+school> db.students.find({$or :[{fullTime:true},{age:{$lte:22}}]})
+[
+  {
+    _id: ObjectId("650184053e98c23e45821ec0"),
+    name: 'Sandy',
+    age: 27,
+    gpa: 4.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: 18,
+    gpa: 2.5,
+    fullTime: true
+  }
+]
+
+//$nor
+school> db.students.find({$nor:[{fullTime:true},{age:{$lte:22}}]})
+[
+  {
+    _id: ObjectId("6501832c3e98c23e45821ebd"),
+    name: 'Spongebob',
+    age: 30,
+    gpa: 3.2,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ebf"),
+    name: 'Patrick',
+    age: 38,
+    gpa: 1.5,
+    fullTime: false
+  },
+  {
+    _id: ObjectId("65018b380ac4c82387a7b1bb"),
+    name: 'Larry',
+    age: 23,
+    gpa: 2.8,
+    fulltime: false,
+    registerDate: ISODate("2023-09-13T10:13:12.190Z"),
+    gradutionDate: null,
+    courses: [ 'Biology', 'Chemistry', 'Calculus' ],
+    address: { street: '123 Fake St.', city: 'Bikini Bottom', zip: 12345 },
+    fullTime: false
+  }
+]
+
+//$not 
+school> db.students.find({age:{$not:{$gte:30}}})
+[
+  {
+    _id: ObjectId("650184053e98c23e45821ec0"),
+    name: 'Sandy',
+    age: 27,
+    gpa: 4.5,
+    fullTime: true
+  },
+  {
+    _id: ObjectId("650184053e98c23e45821ec1"),
+    name: 'Gary',
+    age: null,
+    gpa: 2.5,
+    fullTime: true
+  }
+]
+
+
+
